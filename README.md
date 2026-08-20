@@ -1,206 +1,223 @@
 # MedXup
 
-MedXup is an AI-assisted pediatric clinical decision-support prototype. It combines patient screening data with pediatric textbook content, structured BNF for Children dosing data, and research-paper retrieval to generate a streamed clinical report for professional review.
+MedXup is an AI-assisted pediatric clinical decision-support platform designed to help clinicians turn patient screening information into structured, evidence-informed reports.
 
-> **Clinical disclaimer:** MedXup is a decision-support prototype, not a medical device and not a substitute for independent clinical judgement. Its recommendations, risk labels, calculations, citations, and medicine doses must be validated by a qualified clinician before use.
+The application combines pediatric reference material, medicine dosing information, research retrieval, and large language models to support rapid clinical review. It includes a guided screening workflow, multilingual voice input, streamed analysis, evidence summaries, and PDF report generation.
 
-## Features
+> MedXup is intended to support qualified healthcare professionals. It does not replace clinical judgement, diagnosis, or treatment decisions.
 
-- Guided pediatric screening for demographics, measurements, vital signs, symptoms, and history
-- Multilingual browser voice assistant for collecting symptoms
-- Hybrid Nelson textbook retrieval using BM25 and PubMedBERT embeddings
-- Structured pediatric medicine lookup from a local BNFC-derived table
-- Optional Qdrant research retrieval for complex presentations
-- Cross-encoder reranking and Azure OpenAI report generation
-- Streaming clinical reports with evidence metadata
-- Browser-generated PDF reports and clinician feedback capture
+## Key capabilities
 
-## Reference book
+- Guided pediatric patient screening
+- Collection of measurements, vital signs, symptoms, and clinical history
+- Multilingual voice-assisted symptom capture
+- Hybrid semantic and keyword search across pediatric reference content
+- Structured BNF for Children medicine and dosage lookup
+- Research-paper retrieval for complex presentations
+- Evidence-informed clinical report generation with Azure OpenAI
+- Real-time report streaming
+- PDF export and clinician feedback collection
 
-[BNF for Children (Google Drive)](https://drive.google.com/file/d/1GOe0-RFTVDtvr7Ffbb6EMFUw3jvMmHx6/view?usp=sharing)
+## Technology stack
 
-Only use and distribute the referenced book if you have the necessary permission or licence. The book, extracted content, generated indexes, and patient reports should not be committed to this repository.
+### Frontend
 
-## Architecture
+- React 18 and TypeScript
+- Vite
+- Tailwind CSS
+- Radix UI
+- React Router
+- React Markdown
+- jsPDF
 
-```mermaid
-flowchart LR
-    clinician[Clinician]
+### Backend
 
-    subgraph browser[React + Vite frontend]
-        screening[Screening form]
-        voice[Voice assistant]
-        report[Clinical report UI]
-        pdf[PDF generation]
-    end
+- Python and FastAPI
+- Azure OpenAI
+- Sentence Transformers and PyTorch
+- ChromaDB
+- Qdrant
+- BM25 retrieval
+- Cross-encoder reranking
 
-    subgraph api[FastAPI backend]
-        endpoints[REST and NDJSON endpoints]
-        analyzer[ClinicalAnalyzer]
-        query[Query generation and complexity routing]
-        context[Context assembly]
-        feedback[Report and feedback storage]
-    end
+## Clinical reference
 
-    subgraph retrieval[Clinical retrieval]
-        hybrid[Hybrid BM25 and semantic search]
-        nelson[(Nelson ChromaDB)]
-        bnfc[(BNFC dosing table)]
-        qdrant[(Qdrant research index)]
-        reranker[Cross-encoder reranker]
-    end
+[Access BNF for Children](https://drive.google.com/file/d/1GOe0-RFTVDtvr7Ffbb6EMFUw3jvMmHx6/view?usp=sharing)
 
-    subgraph external[External AI services]
-        queryLlm[Azure OpenAI query processing]
-        reportLlm[Azure OpenAI report generation]
-    end
-
-    clinician --> screening
-    clinician --> voice
-    voice -->|POST /voice-llm| endpoints
-    screening -->|POST /analyze-stream| endpoints
-    endpoints --> analyzer
-    analyzer --> query
-    query --> queryLlm
-    query --> hybrid
-    hybrid --> nelson
-    query --> bnfc
-    query -->|complex cases| qdrant
-    hybrid --> reranker
-    qdrant --> reranker
-    reranker --> context
-    bnfc --> context
-    context --> reportLlm
-    reportLlm -->|NDJSON stream| report
-    report --> pdf
-    pdf -->|POST /save-report| feedback
-    report -->|POST /submit-feedback| feedback
-    report --> clinician
-```
-
-## Repository structure
+## Project structure
 
 ```text
-.
-|-- backend/
-|   |-- app.py                 # FastAPI application and API routes
-|   |-- config.py              # Paths, models, prompts, and retrieval settings
-|   |-- requirements.txt       # Python dependencies
-|   |-- scripts/               # Dataset indexing and search utilities
-|   `-- src/                   # RAG, retrieval, parsing, and analysis modules
-|-- frontend/
-|   |-- src/components/        # Layout, report, voice, and UI components
-|   |-- src/pages/             # Landing, onboarding, screening, and report pages
-|   `-- vite.config.ts         # Vite build and development proxy
-|-- reports/                   # Generated locally; ignored by Git
-`-- feedback.csv               # Generated locally; ignored by Git
+medxup-complete-project/
+├── backend/
+│   ├── app.py                  # FastAPI application and routes
+│   ├── config.py               # Application and model configuration
+│   ├── requirements.txt        # Python dependencies
+│   ├── scripts/                # Indexing and retrieval utilities
+│   ├── data/                   # Local datasets and vector indexes
+│   └── src/
+│       ├── clinical_analyzer.py
+│       ├── rag_engine.py
+│       ├── query_processor.py
+│       ├── hybrid_retriever.py
+│       ├── qdrant_retriever.py
+│       ├── drug_table_lookup.py
+│       └── extractors/
+├── frontend/
+│   ├── public/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── hooks/
+│   │   └── lib/
+│   ├── package.json
+│   └── vite.config.ts
+└── README.md
 ```
-
-Large datasets, vector databases, medicine tables, generated reports, credentials, installed dependencies, and build output are intentionally excluded by `.gitignore`.
 
 ## Prerequisites
 
-- Python 3.10 or 3.11 recommended
+- Python 3.10 or newer
 - Node.js 18 or newer
-- An Azure OpenAI resource and deployment
-- Local Nelson ChromaDB data
-- A structured BNFC workbook at `backend/data/merged_drug_table.xlsx`
-- Optional Qdrant service and indexed research collection
+- Azure OpenAI endpoint, API key, and deployment
+- Nelson textbook vector index
+- BNF for Children dosing workbook
+- Qdrant instance for research retrieval (optional)
 
-## Backend setup
+## Installation
 
-From PowerShell:
+### 1. Clone the repository
 
-```powershell
+```bash
+git clone https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
+cd YOUR_REPOSITORY
+```
+
+### 2. Configure the backend
+
+```bash
 cd backend
 python -m venv .venv
+```
+
+Activate the environment on Windows:
+
+```powershell
 .\.venv\Scripts\Activate.ps1
+```
+
+Activate it on macOS or Linux:
+
+```bash
+source .venv/bin/activate
+```
+
+Install the Python dependencies:
+
+```bash
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 pip install openpyxl tiktoken qdrant-client azure-ai-formrecognizer azure-core
 ```
 
-Create `backend/.env` locally:
+Create `backend/.env`:
 
 ```dotenv
 AZURE_OPENAI_ENDPOINT=https://your-resource.openai.azure.com/
-AZURE_OPENAI_API_KEY=replace-me
-AZURE_OPENAI_DEPLOYMENT_NAME=replace-me
+AZURE_OPENAI_API_KEY=your-api-key
+AZURE_OPENAI_DEPLOYMENT_NAME=your-deployment-name
 AZURE_OPENAI_API_VERSION=2024-02-15-preview
 
-# Optional document extraction
 AZURE_DOC_INTELLIGENCE_ENDPOINT=
 AZURE_DOC_INTELLIGENCE_KEY=
 
-# Optional research retrieval
 QDRANT_URL=http://localhost:6333
 QDRANT_COLLECTION=pediatric_research
 ```
 
-Never place Azure credentials in frontend `VITE_*` variables: Vite can expose referenced values in the browser bundle.
+Place the required local resources at:
 
-Start the API:
+```text
+backend/data/chroma_db_nelson/
+backend/data/merged_drug_table.xlsx
+```
 
-```powershell
+### 3. Start the backend
+
+```bash
 cd backend
 uvicorn app:app --reload --host 127.0.0.1 --port 8000
 ```
 
-The API documentation is available at `http://127.0.0.1:8000/docs`.
+FastAPI documentation is available at [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs).
 
-## Frontend setup
+### 4. Configure the frontend
 
-In a second terminal:
+Open another terminal:
 
-```powershell
+```bash
 cd frontend
 npm ci
 npm run dev
 ```
 
-Open `http://localhost:5173`. During development, Vite proxies API requests to `http://127.0.0.1:8000`.
+The application is available at [http://localhost:5173](http://localhost:5173).
 
 ## Production build
 
-```powershell
+Build the frontend:
+
+```bash
 cd frontend
 npm ci
 npm run build
-cd ..\backend
+```
+
+Start the backend from the project root:
+
+```bash
+cd backend
 uvicorn app:app --host 0.0.0.0 --port 8000
 ```
 
-When `frontend/dist` exists, FastAPI serves the built single-page application alongside the API.
+FastAPI automatically serves the compiled frontend when `frontend/dist` is present.
 
-## Main API routes
+## API endpoints
 
-| Method | Route | Purpose |
+| Method | Endpoint | Description |
 | --- | --- | --- |
-| `GET` | `/health` | Service and index status |
-| `GET` | `/stats` | Retrieval-system statistics |
-| `POST` | `/analyze` | Non-streaming clinical analysis |
-| `POST` | `/analyze-stream` | NDJSON-streamed clinical analysis |
-| `POST` | `/voice-llm` | Server-side voice-assistant LLM call |
-| `POST` | `/save-report` | Save a generated PDF locally |
-| `POST` | `/submit-feedback` | Save or update clinician feedback |
+| `GET` | `/health` | Returns application and index status |
+| `GET` | `/stats` | Returns retrieval-system statistics |
+| `POST` | `/analyze` | Generates a complete clinical analysis |
+| `POST` | `/analyze-stream` | Streams a clinical analysis as NDJSON |
+| `POST` | `/voice-llm` | Processes voice-assistant conversation turns |
+| `POST` | `/save-report` | Saves a generated PDF report |
+| `POST` | `/submit-feedback` | Saves or updates clinician feedback |
 
-## Development checks
+## Development commands
 
-```powershell
-python -m compileall -q backend
+Frontend:
+
+```bash
 cd frontend
-npm exec tsc -- --noEmit
-npm run lint
+npm run dev
 npm run build
-npm audit --omit=dev
+npm run lint
 ```
 
-The current prototype still has TypeScript, lint-configuration, dependency, security, and clinical-validation work to complete before deployment.
+Backend:
 
-## Data and security
+```bash
+cd backend
+python -m compileall -q .
+uvicorn app:app --reload
+```
 
-- Do not commit `.env` files, API keys, patient reports, feedback, or identifiable clinical data.
-- Use only de-identified test cases during development.
-- Add authentication, authorization, rate limiting, encrypted storage, retention rules, and an audit trail before exposing the service beyond a controlled development environment.
-- Review the applicable medical-device, privacy, copyright, and data-protection requirements for the intended deployment region.
+## Application workflow
+
+1. Enter the patient's demographic information and measurements.
+2. Record vital signs, symptoms, and relevant history.
+3. Use the optional voice assistant to capture symptoms conversationally.
+4. Submit the screening for clinical analysis.
+5. Review the streamed report, supporting evidence, and recommendations.
+6. Export the report as a PDF and submit clinician feedback.
 
