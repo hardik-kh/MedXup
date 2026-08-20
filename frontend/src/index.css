@@ -1,0 +1,124 @@
+/* Import Inter font first */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* MedXup Clinical Design System - Soft Teal Theme */
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 200 25% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 200 25% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 200 25% 15%;
+
+    /* Soft Teal Primary */
+    --primary: 187 85% 36%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Light teal tints */
+    --secondary: 187 30% 95%;
+    --secondary-foreground: 187 85% 25%;
+
+    --muted: 200 20% 96%;
+    --muted-foreground: 200 15% 45%;
+
+    --accent: 187 40% 92%;
+    --accent-foreground: 187 85% 25%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 200 20% 88%;
+    --input: 200 20% 88%;
+    --ring: 187 85% 36%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 187 20% 98%;
+    --sidebar-foreground: 200 25% 25%;
+    --sidebar-primary: 187 85% 36%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 187 30% 94%;
+    --sidebar-accent-foreground: 187 85% 25%;
+    --sidebar-border: 200 20% 90%;
+    --sidebar-ring: 187 85% 36%;
+
+    /* Custom tokens */
+    --clinical-surface: 187 15% 98%;
+    --clinical-border: 187 20% 85%;
+  }
+
+  .dark {
+    --background: 200 30% 8%;
+    --foreground: 0 0% 95%;
+
+    --card: 200 25% 12%;
+    --card-foreground: 0 0% 95%;
+
+    --popover: 200 25% 12%;
+    --popover-foreground: 0 0% 95%;
+
+    --primary: 187 75% 45%;
+    --primary-foreground: 200 30% 8%;
+
+    --secondary: 200 20% 18%;
+    --secondary-foreground: 187 60% 70%;
+
+    --muted: 200 20% 18%;
+    --muted-foreground: 200 15% 60%;
+
+    --accent: 200 20% 18%;
+    --accent-foreground: 187 60% 70%;
+
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 200 20% 22%;
+    --input: 200 20% 22%;
+    --ring: 187 75% 45%;
+
+    --sidebar-background: 200 25% 10%;
+    --sidebar-foreground: 0 0% 90%;
+    --sidebar-primary: 187 75% 45%;
+    --sidebar-primary-foreground: 200 30% 8%;
+    --sidebar-accent: 200 20% 16%;
+    --sidebar-accent-foreground: 187 60% 70%;
+    --sidebar-border: 200 20% 18%;
+    --sidebar-ring: 187 75% 45%;
+
+    --clinical-surface: 200 25% 10%;
+    --clinical-border: 200 20% 25%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+  }
+}
+
+@layer utilities {
+  .clinical-card {
+    @apply bg-card border border-clinical-border rounded-lg shadow-sm;
+  }
+
+  .clinical-surface {
+    @apply bg-clinical-surface;
+  }
+}

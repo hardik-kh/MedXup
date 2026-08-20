@@ -1,0 +1,33 @@
+# Core Dependencies
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+python-multipart==0.0.9
+pydantic==2.9.2
+python-dotenv==1.0.1
+
+# AI & ML
+openai>=1.99.0,<2.0.0
+sentence-transformers==2.7.0
+torch==2.5.1
+
+# Vector Database
+chromadb==0.5.20
+
+# PDF Processing
+PyPDF2==3.0.1
+pdfplumber==0.11.4
+
+# Text Processing
+nltk==3.9.1
+spacy==3.8.2
+
+# UI
+gradio==5.5.0
+
+# Utilities
+tqdm==4.67.1
+numpy==1.26.4
+
+# RAG Pipeline
+rank-bm25==0.2.2
+transformers==4.36.0

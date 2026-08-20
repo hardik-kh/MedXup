@@ -1,0 +1,79 @@
+# Environment variables and credentials
+.env
+.env.*
+**/.env
+**/.env.*
+!.env.example
+!**/.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+*.egg-info/
+.eggs/
+pip-wheel-metadata/
+
+# Node / frontend
+node_modules/
+frontend/node_modules/
+backend/node_modules/
+dist/
+frontend/dist/
+build/
+coverage/
+.vite/
+*.tsbuildinfo
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Large local medical datasets and generated indexes
+backend/data/raw_pdfs/
+backend/data/raw_json/
+backend/data/chroma_db*/
+backend/data/*.xlsx
+backend/src/data/debug_*.txt
+
+# Generated clinical outputs (may contain patient information)
+reports/
+feedback.csv
+/new-report.png
+/old-report.png
+
+# Model and tool caches
+.cache/
+.huggingface/
+models/
+
+# Editors and IDEs
+.vscode/
+.idea/
+*.code-workspace
+*.swp
+*.swo
+*~
+
+# Operating-system files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.bak
+*.log
+
